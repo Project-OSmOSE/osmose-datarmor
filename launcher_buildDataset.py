@@ -249,3 +249,5 @@ def delete_anormal_files(dataset_ID,list_filename_anormal_duration):
 
     print('\n ALL ANORMAL FILES REMOVED ! you can now re-run the previous file to finish importing it on OSmOSE platform')
 
+
+# To delete : test push on github
