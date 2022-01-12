@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+#PBS -q mpi_1
+#PBS -l walltime=3:00:00
+#PBS -l select=1:ncpus=28:mpiprocs=28:mem=120gb
+#PBS -o logjob_outpath
+#PBS -m n
+
+/home/datawork-osmose/notebook_source/qsub_resample.sh dataset_ID folderIn analysis_fs ind_min ind_max folderOut new_audioFileDuration orig_audioFileDuration nber_segments
