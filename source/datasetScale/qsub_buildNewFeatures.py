@@ -4,8 +4,6 @@ import pandas as pd
 import sys
 from multiprocessing import Pool
 import time
-from module_soundscape import *
-from module_activityFuncs import *
 from module_saveNewVariables import *
 import matplotlib.pyplot as plt
 import numpy as np

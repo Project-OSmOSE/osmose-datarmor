@@ -175,8 +175,7 @@ def builder_dataset(dataset_ID,gps):
             
     if (ct_anormal_duration>0) | (ct_anormal_size>0):
         print('\n \n SORRY BUT YOUR DATASET CONTAINS ANORMAL FILES , so IT HAS NOT BEEN IMPORTED ON OSMOSE PLATFORM .. you can use the next cell to directly delete them')
-        return list_filename_anormal_duration
-    
+
     else:
 
         # change name of the original wav folder
@@ -188,7 +187,8 @@ def builder_dataset(dataset_ID,gps):
         os.system('chmod -R g+rw /home/datawork-osmose/dataset/'+dataset_ID)
         print('\n DONE ! you dataset is on OSmOSE platform !')
     
-    
+    return list_filename_anormal_duration
+
     
 # def keep_only_filesAlmostSameDura_deleteOthers(dataset_ID,list_filename_anormal_duration):
         
