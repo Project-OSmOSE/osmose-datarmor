@@ -1,39 +1,30 @@
 # Analytics platform of OSmOSE 
 
 
-Our analytics services are available as user-friendly notebooks (osmose_analytics_v0.0/notebooks/), based on different code sources depending on their application (osmose_analytics_v0.0/source/). 
-
-It is important to note that all our codes have been mostly developed to be run on the infrastructure Datarmor/IFREMER, and most of them are consequently not suited for local stand-alone execution. We are currently working on this point to allow interesting user/developer to review and contribute to our codes (see section \@ref(sec_contribute))).
+Our analytics services are accessible through user-friendly [notebooks](notebooks/). It is important to note that all our codes have been mostly developed to be run on the infrastructure Datarmor/IFREMER, and most of them are consequently not suited for local stand-alone execution. We are currently making some efforts in adapting our codes in this direction so they can be tested and reviewed by external user/developers.
 
 
-
-## Analytical services 
-
-They are accessible through the following notebooks:
+## Notebooks 
 
 1. build_datasets.ipynb : used for the importation and formatting of new datasets
 
 2. fileScaleAnalysis.ipynb : used for the generation of file-scale (or shorter) spectrograms
 
-3. datasetScaleAnalysis.ipynb : used for the generation of long-term spectrograms
+3. datasetScaleAnalysis.ipynb : used for long-term analysis, can be used to generate soundscape metrics (eg long-term averaged spectrograms, EPD) or retrieve raw welch spectra at different time resolutions.
 
-See [user_guide.pdf](notebooks/user_guide.pdf )
+See [user_guide.pdf](notebooks/user_guide.pdf ) for more details.
 
 
-## Note for developers : how to contribute ? {#sec_contribute}
-
-In the following we list our modules for which we would welcome any contribution. We selected only modules which can be executed locally in a stand-alone way within the environment `env_osmosePlatform` provided above. For each of them, we also provide a list of new functionalities that could be improved. 
+## Note for developers : how to contribute ?
 
 1. Start by cloning this folder
-2. Only our following scripts can actually be executed locally within this cloned environment
+2. Download a [sampled dataset](https://drive.google.com/file/d/1hJZAGFlkL1_Cc1lC77LFaiRgM_HTXZc0/view?usp=sharing) (ask for access if required) to be put at the same level as your cloned folder
+3. Make contributions using standard git process!
+
+Here is our current [list](https://docs.google.com/document/d/e/2PACX-1vSe6s3FT97Vp3Khqr4NCXtZ9Gr6DKE-RxjbXF8gLxhf7NxkgX76hKXNX4KzMJKyHautm4x__XhMvyj0/pub) of current bugs & new functionalities to be implemented. 
 
 
-### Sampled dataset
-
-Start by cloning the environment `env_osmosePlatform`
-
-
-### Module to generate file-scale spectrograms
+#### Modules adapted for local stand-alone execution
 
 * [qsub_spectroGenerationFileScale.py](source/fileScale/qsub_spectroGenerationFileScale.py)
 

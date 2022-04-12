@@ -266,8 +266,6 @@ if __name__ == "__main__":
 
         path_osmose_dataset = os.path.join(os.path.dirname(os.path.dirname(os.getcwd())) , 'dataset')
 
-        path_osmose_dataset = '/home/cazaudo/Desktop/git_osmose/git_jupyter_scripts/dataset'
-
     # else you are on datarmor
     else:
         path_osmose_dataset = "/home/datawork-osmose/dataset/"
