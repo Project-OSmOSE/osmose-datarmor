@@ -1,0 +1,2 @@
+- MaelleTtrt (01/07/2022) : add hydrophone sensitivity to all analysis (file scale and dataset scale)
+- GabrielDubus (01/07/2022) : add mmdetect model to AI notebook
