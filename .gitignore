@@ -1,0 +1,3 @@
+# Ce fichier indique à git d’ignorer certains fichiers ou dossiers.
+
+/.idea
