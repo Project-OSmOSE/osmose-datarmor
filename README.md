@@ -1,4 +1,4 @@
-# Analytics platform of OSmOSE 
+# Analytics platform of OSmOSE !
 
 OSmOSE is an open source project aiming to develop tools to help processing underwater passive acoustic data. Our OSmOSE analytical tools have been primarily developed and made accessible as user-friendly [notebooks](notebooks/) on the infrastructure [Datarmor of IFREMER](https://wwz.ifremer.fr/Recherche/Infrastructures-de-recherche/Infrastructures-numeriques/Pole-de-Calcul-et-de-Donnees-pour-la-Mer). Consequently, it is important to note that most of our codes are not suited for local standalone execution. We are currently making some efforts in adapting our codes in this direction so they can be tested and reviewed by external user/developers.
 

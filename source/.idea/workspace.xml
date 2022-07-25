@@ -2,120 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6f5e8149-f532-4a74-866c-b43248877ecc" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../code_snippets/convert_APLOSEannotation_to_task1.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../code_snippets/create_timestampCSV.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../code_snippets/get_performance_log.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../code_snippets/list_annotation_files.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../file_examples/ECMWF_1H.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../file_examples/gps_depth.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../file_examples/timestamp.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../guide/user_guide.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../notebooks/AI.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../notebooks/buildDatasetsCSV_temporaryNotebook.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/aux_launcher.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/launcher_AI.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/launcher_audioNormalization.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/launcher_datasetScale.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/launcher_metadataGetter.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module_AImodels.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module_soundscape.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/qsub_audioNormalization.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/qsub_buildNewFeatures_v2.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/qsub_reaggregateGetFeatures_v2.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/qsub_setPermissions.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/qsub_timestampAfterDecoupe.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templateQsub_audioNormalization.pbs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templateQsub_buildNewFeatures.pbs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templateQsub_decoupe.pbs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templateQsub_reaggregateGetFeatures.pbs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templateQsub_resample.pbs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templateQsub_spectroGenerationDatasetScale.pbs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../docs/technical_guide.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../docs/user_guide.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../notebooks/build_dataset.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../notebooks/build_dataset.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../notebooks/datasetScaleAnalysis.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../notebooks/datasetScaleAnalysis.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../notebooks/fileScaleAnalysis.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../notebooks/fileScaleAnalysis.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auxiliary/aux_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/aux_functions.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auxiliary/qsub_setPermissions.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/auxiliary/templateQsub_setPermissions.pbs" beforeDir="false" afterPath="$PROJECT_DIR$/templateQsub_buildPKLlargescale.pbs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/buildDataset/launcher_buildDataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/launcher_buildDataset.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/datasetScale/aux.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/datasetScale/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/datasetScale/launcher_datasetScale.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/datasetScale/module_saveNewVariables.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/datasetScale/qsub_buildNewFeatures.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/datasetScale/qsub_reaggregateGetFeatures.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/datasetScale/qsub_spectroGenerationDatasetScale.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/datasetScale/qsub_timestampJsonCreation.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/datasetScale/templateQsub_buildNewFeatures.pbs" beforeDir="false" afterPath="$PROJECT_DIR$/templateQsub_timestampAfterDecoupe.pbs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/datasetScale/templateQsub_reaggregateGetFeatures.pbs" beforeDir="false" afterPath="$PROJECT_DIR$/templateQsub_convert_json_to_pkl.pbs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/datasetScale/templateQsub_spectroGenerationDatasetScale.pbs" beforeDir="false" afterPath="$PROJECT_DIR$/templateQsub_setPermissions.pbs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/datasetScale/templateQsub_timestampJsonCreation.pbs" beforeDir="false" afterPath="$PROJECT_DIR$/templateQsub_timestampJsonCreation.pbs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fileScale/.idea/fileScale.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fileScale/.idea/libraries/R_User_Library.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fileScale/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fileScale/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fileScale/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fileScale/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/fileScale/launcher_fileScale.py" beforeDir="false" afterPath="$PROJECT_DIR$/launcher_fileScale.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fileScale/qsub_spectroGenerationFileScale_v2.py" beforeDir="false" afterPath="$PROJECT_DIR$/qsub_spectroGenerationFileScale.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fileScale/templateQsub_spectroGenerationFileScale.pbs" beforeDir="false" afterPath="$PROJECT_DIR$/templateQsub_spectroGenerationFileScale.pbs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resample/qsub_resample.sh" beforeDir="false" afterPath="$PROJECT_DIR$/qsub_resample.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resample/templateQsub_resample.pbs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/source.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/source.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
-  </component>
-  <component name="FUSProjectUsageTrigger">
-    <session id="259798812">
-      <usages-collector id="statistics.lifecycle.project">
-        <counts>
-          <entry key="project.closed" value="1" />
-          <entry key="project.open.time.3" value="1" />
-          <entry key="project.opened" value="1" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.extensions.open">
-        <counts>
-          <entry key="py" value="1" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.open">
-        <counts>
-          <entry key="Python" value="1" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.extensions.edit">
-        <counts>
-          <entry key="py" value="26" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.edit">
-        <counts>
-          <entry key="Python" value="26" />
-        </counts>
-      </usages-collector>
-    </session>
-  </component>
-  <component name="FileEditorManager">
-    <leaf>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/qsub_spectroGenerationFileScale.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="216" column="16" lean-forward="true" selection-start-line="216" selection-start-column="16" selection-end-line="216" selection-end-column="16" />
-              <folding>
-                <element signature="e#0#16#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
@@ -133,6 +26,7 @@
     <option name="width" value="1264" />
     <option name="height" value="1056" />
   </component>
+  <component name="ProjectId" id="2CQYYsn7rRZ4wtoXwP8kTDkTiCb" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -154,22 +48,33 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
-  </component>
   <component name="RunManager">
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <module name="source" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="qsub_spectroGenerationFileScale" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="source" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -182,6 +87,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/qsub_spectroGenerationFileScale.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
@@ -197,6 +103,7 @@
       </list>
     </recent_temporary>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -207,6 +114,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1656582854598</updated>
+      <workItem from="1658736332366" duration="1414000" />
     </task>
     <servers />
   </component>
@@ -234,6 +142,9 @@
       <window_info anchor="right" id="R Graphics" order="3" />
       <window_info anchor="right" id="R Packages" order="4" />
     </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
