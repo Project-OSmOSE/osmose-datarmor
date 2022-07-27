@@ -63,7 +63,7 @@ def gen_spectro(max_w, min_color_val, data, sample_rate, win_size, nfft, pct_ove
 
     win = np.hamming(Nwin)
     if Nfft < (0.5 * Nwin):
-        scale_psd = 2.0 * Nwin / (Nfft * ((win * win).sum() / Nwin))
+        scale_psd = 2.0 
     else:
         scale_psd = 2.0 / ((win * win).sum())
     Nbech = np.size(x)
@@ -73,11 +73,12 @@ def gen_spectro(max_w, min_color_val, data, sample_rate, win_size, nfft, pct_ove
     Sxx = np.zeros([np.size(Freq), Nbwin])
     Time = np.linspace(0, Nbech / fs, Nbwin)
     for idwin in range(Nbwin):
-        x_win = x[idwin * Noffset:idwin * Noffset + Nwin] * win
         if Nfft < (0.5 * Nwin):
-            _, Sxx[:, idwin] = signal.welch(x_win, fs=fs, window='hanning', nperseg=Nfft,
-                                            noverlap=int(Nfft / 2))  # , scaling='spectrum')
+            x_win = x[idwin * Noffset:idwin * Noffset + Nwin]
+            _, Sxx[:, idwin] = signal.welch(x_win, fs=fs, window='hamming', nperseg=Nfft,
+                                            noverlap=int(Nfft / 2) , scaling='density')
         else:
+            x_win = x[idwin * Noffset:idwin * Noffset + Nwin] * win
             Sxx[:, idwin] = (np.abs(np.fft.rfft(x_win, n=Nfft)) ** 2)
         Sxx[:, idwin] *= scale_psd
 
