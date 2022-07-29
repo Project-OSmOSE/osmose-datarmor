@@ -53,7 +53,7 @@ def generate_and_save_figures(colmapspectros, segment_times, Freq, log_spectro, 
     plt.close()
 
 
-def gen_spectro(max_w, min_color_val, data, sample_rate, win_size, nfft, pct_overlap, duration, output_file):
+def gen_spectro(max_w, min_color_val, data, sample_rate, win_size, nfft, pct_overlap, duration, output_file, scaling='density'):
     x = data
     fs = sample_rate
 
@@ -63,8 +63,18 @@ def gen_spectro(max_w, min_color_val, data, sample_rate, win_size, nfft, pct_ove
 
     win = np.hamming(Nwin)
     if Nfft < (0.5 * Nwin):
-        scale_psd = 2.0 
+        if scaling == 'density':
+            scale_psd = 2.0 
+        if scaling == 'spectrum':
+            scale_psd = 2.0 *fs
+        
     else:
+        if scaling == 'density':
+            scale_psd = 2.0 / (((win * win).sum())*fs)
+        if scaling == 'spectrum':
+            scale_psd = 2.0 / ((win * win).sum())
+            
+            
         scale_psd = 2.0 / ((win * win).sum())
     Nbech = np.size(x)
     Noffset = Nwin - Noverlap
