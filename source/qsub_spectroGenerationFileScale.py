@@ -107,7 +107,7 @@ def gen_spectro(max_w, min_color_val, data, sample_rate, win_size, nfft, pct_ove
     generate_and_save_figures(colmapspectros, segment_times, Freq, log_spectro, min_color_val, max_color_val,
                               output_file)
 
-    return Sxx, Freq
+    return Sxx, Freq, Time
 
 
 
@@ -137,7 +137,7 @@ def gen_tiles(nber_level, data, sample_rate, output, winsize, nfft, overlap, min
 
         output_file = output[:-4] + segment_str + '_' + str(nber_tiles_lowest_zoom_level) + '_' + str(tile) + '.png'
 
-        Sxx, Freq = gen_spectro(max_w, min_color_val, sample_data, sample_rate, winsize, nfft, overlap,
+        Sxx, Freq, Time = gen_spectro(max_w, min_color_val, sample_data, sample_rate, winsize, nfft, overlap,
                                 len(sample_data) / sample_rate, output_file)
         
         Sxx_2 = np.hstack((Sxx_2, Sxx))
@@ -171,8 +171,8 @@ def gen_tiles(nber_level, data, sample_rate, output, winsize, nfft, overlap, min
                                       max_color_val, output_file)
     
     #PATH  = '.....dataset/dataset_name/analysis/spectrograms_mat/Temps_Fe/nfft=XX winsize=XX overlap=XX cvr=XX/'    
-    #output_file_Sxx = PATH + 'filename/' + segment_str + '_' + str(2 ** ll) + '_' + str(kk) + '.npy'
-    #np.save(output_file_Sxx, Sxx_int)
+    #output_file_Sxx = PATH + 'filename/' + segment_str + '_' + str(2 ** ll) + '_' + str(kk) + '.npz'
+    #np.savez(output_file_Sxx, Sxx=Sxx_int, Freq=Freq, Time=Time)
     
 
 
