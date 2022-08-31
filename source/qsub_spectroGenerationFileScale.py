@@ -165,9 +165,15 @@ def gen_tiles(nber_level, data, sample_rate, output, winsize, nfft, overlap, min
             print('DIM LOG SPECTRO:', log_spectro.shape)
 
             output_file = output[:-4] + segment_str + '_' + str(2 ** ll) + '_' + str(kk) + '.png'
-
+            
+            
             generate_and_save_figures(colmapspectros, segment_times_int, Freq, log_spectro, min_color_val,
                                       max_color_val, output_file)
+    
+    #PATH  = '.....dataset/dataset_name/analysis/spectrograms_mat/Temps_Fe/nfft=XX winsize=XX overlap=XX cvr=XX/'    
+    #output_file_Sxx = PATH + 'filename/' + segment_str + '_' + str(2 ** ll) + '_' + str(kk) + '.npy'
+    #np.save(output_file_Sxx, Sxx_int)
+    
 
 
 
@@ -446,8 +452,3 @@ if __name__ == "__main__":
             
             
             
-            
-            
-            
-            
-        
