@@ -76,9 +76,7 @@ def gen_spectro(max_w, min_color_val, data, sample_rate, win_size, nfft, pct_ove
             scale_psd = 2.0 / (((win * win).sum())*fs)
         if scaling == 'spectrum':
             scale_psd = 2.0 / ((win * win).sum())
-            
-            
-        scale_psd = 2.0 / ((win * win).sum())
+           
     Nbech = np.size(x)
     Noffset = Nwin - Noverlap
     Nbwin = int((Nbech - Nwin) / Noffset)
@@ -100,14 +98,10 @@ def gen_spectro(max_w, min_color_val, data, sample_rate, win_size, nfft, pct_ove
     if scaling == 'spectrum':
         log_spectro = 10 * np.log10(Sxx)
 
-    segment_times = np.linspace(0, duration, Sxx.shape[
-        1])  # np.arange(win_size / 2, x.shape[-1] - win_size / 2 + 1, win_size - Noverlap) / float(sample_rate)
-
-    print('DIM LOG SPECTRO:', log_spectro.shape)
-    generate_and_save_figures(colmapspectros, segment_times, Freq, log_spectro, min_color_val, max_color_val,
+    generate_and_save_figures(colmapspectros, Time, Freq, log_spectro, min_color_val, max_color_val,
                               output_file)
 
-    return Sxx, Freq, Time
+    return Sxx, Freq
 
 
 
@@ -126,8 +120,6 @@ def gen_tiles(nber_level, data, sample_rate, output, winsize, nfft, overlap, min
     nber_tiles_lowest_zoom_level = 2 ** (nber_level - 1)
     tile_duration = duration / nber_tiles_lowest_zoom_level
 
-    print('LEVEL:', str(nber_tiles_lowest_zoom_level))
-
     Sxx_2 = np.empty((int(nfft / 2) + 1, 1))
     for tile in range(0, nber_tiles_lowest_zoom_level):
         start = tile * tile_duration
@@ -137,7 +129,7 @@ def gen_tiles(nber_level, data, sample_rate, output, winsize, nfft, overlap, min
 
         output_file = output[:-4] + segment_str + '_' + str(nber_tiles_lowest_zoom_level) + '_' + str(tile) + '.png'
 
-        Sxx, Freq, Time = gen_spectro(max_w, min_color_val, sample_data, sample_rate, winsize, nfft, overlap,
+        Sxx, Freq = gen_spectro(max_w, min_color_val, sample_data, sample_rate, winsize, nfft, overlap,
                                 len(sample_data) / sample_rate, output_file)
         
         Sxx_2 = np.hstack((Sxx_2, Sxx))
@@ -147,9 +139,7 @@ def gen_tiles(nber_level, data, sample_rate, output, winsize, nfft, overlap, min
     segment_times = np.linspace(0, len(data) / sample_rate, Sxx_lowest_level.shape[1])[np.newaxis, :]
 
     for ll in range(nber_level)[::-1]:
-
-        print('LEVEL:', ll)
-
+      
         nberspec = Sxx_lowest_level.shape[1] // (2 ** ll)
 
         for kk in range(2 ** ll):
@@ -172,7 +162,7 @@ def gen_tiles(nber_level, data, sample_rate, output, winsize, nfft, overlap, min
     
     #PATH  = '.....dataset/dataset_name/analysis/spectrograms_mat/Temps_Fe/nfft=XX winsize=XX overlap=XX cvr=XX/'    
     #output_file_Sxx = PATH + 'filename/' + segment_str + '_' + str(2 ** ll) + '_' + str(kk) + '.npz'
-    #np.savez(output_file_Sxx, Sxx=Sxx_int, Freq=Freq, Time=Time)
+    #np.savez(output_file_Sxx, Sxx=Sxx_int, Freq=Freq, Time=segment_times_int)
     
 
 
