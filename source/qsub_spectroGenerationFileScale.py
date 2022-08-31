@@ -267,7 +267,6 @@ if __name__ == "__main__":
         # nb_bits = 16   # number of bits of the coded signal
         # datatype = 'int16'
         sensitivity_dB = -170  # Sensitivity of the hydrophone in dB ref 1V/µPa
-        sensitivity = 10**(sensitivity_dB/20) * 1e6
         nber_wav_to_be_processed = 1
 
         ## default parameters
@@ -372,6 +371,8 @@ if __name__ == "__main__":
     max_freq_dyn = analysis_fs/2
     min_freq_dyn = 0
     autofind_minw = []
+    
+    sensitivity = 10**(sensitivity_dB/20) * 1e6
 
     
     # selection mode of audio files
