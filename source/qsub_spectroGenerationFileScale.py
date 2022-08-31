@@ -6,7 +6,9 @@ import numpy as np
 import os
 import glob
 from multiprocessing import Pool
+from functools import partial
 import pandas as pd
+
 
 plt.switch_backend('agg')
 
@@ -33,8 +35,8 @@ def generate_and_save_figures(colmapspectros, segment_times, Freq, log_spectro, 
     fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(fact_x * 1800 / my_dpi, fact_y * 512 / my_dpi), dpi=my_dpi)
     color_map = plt.cm.get_cmap(colmapspectros)  # .reversed()
     plt.pcolormesh(segment_times, Freq, log_spectro, cmap=color_map)
-    #plt.clim(vmin=min_color_val, vmax=max_color_val)
-    plt.colorbar()
+    plt.clim(vmin=min_color_val, vmax=max_color_val)
+    #plt.colorbar()
     
 
     if nberAdjustSpectros == 0:
@@ -419,12 +421,14 @@ if __name__ == "__main__":
  
         ncpus = 10
         with Pool(processes=ncpus) as pool:
-            pool.map(process_file, list_wav_withEvent)
+            # the partial function is used to have multiple arguments, ie https://python.omics.wiki/multiprocessing_map/multiprocessing_partial_function_multiple_arguments
+            partial_process_file = partial(process_file, peak_voltage=peak_voltage, sensitivity=sensitivity)
+            pool.map(partial_process_file, list_wav_withEvent)
             pool.close()
         
-        for file in list_wav_withEvent:
-            print(file)
-            process_file(file, peak_voltage, sensitivity)
+#        for file in list_wav_withEvent:
+#            print(file)
+#            process_file(file, peak_voltage, sensitivity)
 
     else:
         for file in list_wav_withEvent:
