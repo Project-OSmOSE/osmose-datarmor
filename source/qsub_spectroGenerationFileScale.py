@@ -6,7 +6,9 @@ import numpy as np
 import os
 import glob
 from multiprocessing import Pool
+from functools import partial
 import pandas as pd
+
 
 plt.switch_backend('agg')
 
@@ -34,7 +36,8 @@ def generate_and_save_figures(colmapspectros, segment_times, Freq, log_spectro, 
     color_map = plt.cm.get_cmap(colmapspectros)  # .reversed()
     plt.pcolormesh(segment_times, Freq, log_spectro, cmap=color_map)
     plt.clim(vmin=min_color_val, vmax=max_color_val)
-    # plt.colorbar()
+    #plt.colorbar()
+    
 
     if nberAdjustSpectros == 0:
         fig.axes[0].get_xaxis().set_visible(False)
@@ -54,7 +57,7 @@ def generate_and_save_figures(colmapspectros, segment_times, Freq, log_spectro, 
 
 
 def gen_spectro(max_w, min_color_val, data, sample_rate, win_size, nfft, pct_overlap, duration, output_file, scaling='density'):
-    x = data
+    x=data
     fs = sample_rate
 
     Nwin = win_size
@@ -91,8 +94,11 @@ def gen_spectro(max_w, min_color_val, data, sample_rate, win_size, nfft, pct_ove
             x_win = x[idwin * Noffset:idwin * Noffset + Nwin] * win
             Sxx[:, idwin] = (np.abs(np.fft.rfft(x_win, n=Nfft)) ** 2)
         Sxx[:, idwin] *= scale_psd
-
-    log_spectro = 10 * np.log10(Sxx)
+        
+    if scaling == 'density':
+        log_spectro = 10 * np.log10(Sxx/(1e-12))
+    if scaling == 'spectrum':
+        log_spectro = 10 * np.log10(Sxx)
 
     segment_times = np.linspace(0, duration, Sxx.shape[
         1])  # np.arange(win_size / 2, x.shape[-1] - win_size / 2 + 1, win_size - Noverlap) / float(sample_rate)
@@ -104,14 +110,17 @@ def gen_spectro(max_w, min_color_val, data, sample_rate, win_size, nfft, pct_ove
     return Sxx, Freq
 
 
-def gen_tiles(nber_level, data, sample_rate, output, winsize, nfft, overlap, min_color_val, segment_str):
-    if not isnorma:
-        data = (data - np.mean(data)) / np.std(data)
-    else:
-        data = (data - zscore_mean) / zscore_std
 
+def gen_tiles(nber_level, data, sample_rate, output, winsize, nfft, overlap, min_color_val, segment_str, scaling='density'):
+
+    if scaling == 'spectrum':
+        
+        if not isnorma:
+            data = (data - np.mean(data)) / np.std(data)
+        else:
+            data = (data - zscore_mean) / zscore_std
+            
     duration = len(data) / int(sample_rate)
-
     max_w = 0
 
     nber_tiles_lowest_zoom_level = 2 ** (nber_level - 1)
@@ -130,7 +139,7 @@ def gen_tiles(nber_level, data, sample_rate, output, winsize, nfft, overlap, min
 
         Sxx, Freq = gen_spectro(max_w, min_color_val, sample_data, sample_rate, winsize, nfft, overlap,
                                 len(sample_data) / sample_rate, output_file)
-
+        
         Sxx_2 = np.hstack((Sxx_2, Sxx))
 
     Sxx_lowest_level = Sxx_2[:, 1:]
@@ -148,21 +157,30 @@ def gen_tiles(nber_level, data, sample_rate, output, winsize, nfft, overlap, min
 
             segment_times_int = segment_times[:, kk * nberspec: (kk + 1) * nberspec][:, ::2 ** (nber_level - ll)]
 
-            log_spectro = 10 * np.log10(Sxx_int)
+            if scaling == 'density':
+                log_spectro = 10 * np.log10(Sxx_int/(1e-12))
+            if scaling == 'spectrum':
+                log_spectro = 10 * np.log10(Sxx_int)
 
             print('DIM LOG SPECTRO:', log_spectro.shape)
 
             output_file = output[:-4] + segment_str + '_' + str(2 ** ll) + '_' + str(kk) + '.png'
-
+            
+            
             generate_and_save_figures(colmapspectros, segment_times_int, Freq, log_spectro, min_color_val,
                                       max_color_val, output_file)
+    
+    #PATH  = '.....dataset/dataset_name/analysis/spectrograms_mat/Temps_Fe/nfft=XX winsize=XX overlap=XX cvr=XX/'    
+    #output_file_Sxx = PATH + 'filename/' + segment_str + '_' + str(2 ** ll) + '_' + str(kk) + '.npy'
+    #np.save(output_file_Sxx, Sxx_int)
+    
 
 
-def process_file(audio_file):
+
+def process_file(audio_file, peak_voltage, sensitivity):
     print(audio_file)
 
     global zscore_mean, zscore_std
-
     if isnorma:
         zscore_mean = summStats[summStats['filename'] == audio_file]['mean_avg'].values[0]
         zscore_std = summStats[summStats['filename'] == audio_file]['std_avg'].values[0]
@@ -170,8 +188,11 @@ def process_file(audio_file):
     segment_str = ''
 
     if nberAdjustSpectros == 0:
-        data, sample_rate = soundfile.read(os.path.join(path_audio_files, audio_file))
-
+        data, sample_rate = soundfile.read(os.path.join(path_audio_files, audio_file))        
+        # add sensitivity
+        data =(data*peak_voltage)/sensitivity
+        
+        
         bpcoef = signal.butter(20, np.array([fmin_HighPassFilter, sample_rate / 2 - 1]), fs=sample_rate, output='sos',
                                btype='bandpass')
         data = signal.sosfilt(bpcoef, data)
@@ -182,7 +203,7 @@ def process_file(audio_file):
         output_file = os.path.join(path_output_spectrograms, name_folder, audio_file[:-4], audio_file)
 
         gen_tiles(nber_zoom_levels, data, sample_rate, output_file, fileScale_winsize, fileScale_nfft,
-                  fileScale_overlap, min_color_val, segment_str)
+                  fileScale_overlap, min_color_val, segment_str, scaling='density')
 
     else:
 
@@ -190,8 +211,10 @@ def process_file(audio_file):
             os.system("/appli/sox/sox-14.4.2_gcc-7.2.0/bin/sox '" + path_audio_files + '/' + audio_file + "' -r " + str(
                 analysis_fs) + " -t wavpcm " + path_audio_files + "'/temp_'" + audio_file + ";")
             data, sample_rate = soundfile.read(os.path.join(path_audio_files, 'temp_' + audio_file))
+            data =(data*peak_voltage)/sensitivity
         else:
             data, sample_rate = soundfile.read(os.path.join(path_audio_files, audio_file))
+            data =(data*peak_voltage)/sensitivity
 
         output_file = os.path.join(path_output_spectrograms, 'spectro_adjustParams', audio_file)
 
@@ -201,7 +224,7 @@ def process_file(audio_file):
 
         if int(maxtime_display_spectro) == int(orig_fileDuration):
             gen_tiles(nber_zoom_levels, data, sample_rate, output_file, fileScale_winsize, fileScale_nfft,
-                      fileScale_overlap, min_color_val, segment_str)
+                      fileScale_overlap, min_color_val, segment_str, scaling='density')
 
         elif len(data) > maxtime_display_spectro * int(sample_rate):
             seg = np.arange(0, len(data) + 1, maxtime_display_spectro * int(sample_rate))
@@ -209,7 +232,7 @@ def process_file(audio_file):
             for t1, t2 in zip(seg[:-1], seg[1:]):
                 segment_str = '_seg' + str(ct)
                 gen_tiles(nber_zoom_levels, data[t1:t2], sample_rate, output_file, fileScale_winsize, fileScale_nfft,
-                          fileScale_overlap, min_color_val, segment_str)
+                          fileScale_overlap, min_color_val, segment_str, scaling='density')
                 ct += 1
                 if ct == nberAdjustSpectros:
                     break
@@ -223,13 +246,16 @@ if __name__ == "__main__":
 
     # if you want to use this script in local, set am_local to 1 and review lines from 227 to 244
     am_local = 1
+    
+    global isnorma
+    
 
     # if in locals
     if am_local:
 
         ## parameters to BE FILLED
-        path_osmose_dataset = '/home/cazaudo/Desktop/new_git_2/osmose_dataset_sample/' # put here the root path of the dataset folder, eg '/home/cazaudo/Desktop/new_git_2/osmose_dataset_sample/'
-
+        path_osmose_dataset = os.path.join("C:", os.sep,"Users","torterma","Documents","Projets_Osmose","Technology","Analytics","osmose_dataset_sample")
+        #path_osmose_dataset = "C:\Users\torterma\Documents\Projets_Osmose\Technology\Analytics\osmose_dataset_sample"
         analysis_fs = 240
         dataset_ID = 'gliderSPAms_sample1'
 
@@ -238,11 +264,17 @@ if __name__ == "__main__":
         fileScale_winsize = 512
         fileScale_overlap = 90
         colmapspectros = 'jet'
-        nber_zoom_levels = 2
+        nber_zoom_levels = 4
         min_color_val = -20
         max_color_val = 20
-
-        nber_wav_to_be_processed = 4
+        
+        # Parameters used to  the real dB value of the spectrogram
+        peak_voltage = 2.5    # Peak voltage in volt
+        # nb_bits = 16   # number of bits of the coded signal
+        # datatype = 'int16'
+        sensitivity_dB = -170  # Sensitivity of the hydrophone in dB ref 1V/µPa
+        sensitivity = 10**(sensitivity_dB/20) * 1e6
+        nber_wav_to_be_processed = 1
 
         ## default parameters
         nberAdjustSpectros = 0
@@ -250,7 +282,7 @@ if __name__ == "__main__":
         fmin_HighPassFilter = 10
         ind_min = 0
         ind_max = nber_wav_to_be_processed
-
+        isnorma = 0
 
     # else you are on datarmor
     else:
@@ -275,10 +307,12 @@ if __name__ == "__main__":
         maxtime_display_spectro = analysis_fiche['maxtime_display_spectro'][0]
         norma_gliding_zscore = analysis_fiche['norma_gliding_zscore'][0]
         fmin_HighPassFilter = analysis_fiche['fmin_HighPassFilter'][0]
-
-
+        sensitivity_dB = analysis_fiche['sensibility_dB'][0]
+        peak_voltage = analysis_fiche['peak_voltage'][0]
+        scaling = analysis_fiche['scaling'][0]
+        
     # load needed variables from raw metadata
-    metadata = pd.read_csv( os.path.join(path_osmose_dataset , dataset_ID , 'raw/metadata.csv') )
+    metadata = pd.read_csv(os.path.join(path_osmose_dataset , dataset_ID , 'raw', 'metadata.csv') )
     orig_fileDuration = metadata['orig_fileDuration'][0]
     orig_fs = metadata['orig_fs'][0]
     total_nber_audio_files = metadata['nberWavFiles'][0]
@@ -297,8 +331,7 @@ if __name__ == "__main__":
     path_audio_files = os.path.join(path_osmose_dataset, dataset_ID, 'raw/audio', folderName_audioFiles )
     
     path_output_spectrograms = os.path.join(path_analysisFolder, 'spectrograms', str(maxtime_display_spectro)+'_'+str(int(analysis_fs)))    
-    
-    
+        
     path_summstats = os.path.join(path_analysisFolder,'normaParams',folderName_audioFiles)    
     
     
@@ -355,12 +388,13 @@ if __name__ == "__main__":
     # internal variable initialization
     equalize_spectro = True
     
+    # ':' character is forbidden in the folder names (in Windows) -> replaced by '_' (after cvr value)
     if autofind_minw:
         name_folder = 'nfft=' + str(fileScale_nfft) + ' winsize=' + str(fileScale_winsize) + \
-                      ' overlap=' + str(int( fileScale_overlap)) + ' cvr=autofind_min:0'
+                      ' overlap=' + str(int( fileScale_overlap)) + ' cvr=autofind_min_0'
     else:
         name_folder = 'nfft=' + str(fileScale_nfft) + ' winsize=' + str(fileScale_winsize) + \
-                      ' overlap=' + str(int( fileScale_overlap)) + ' cvr='+ str(min_color_val) +':0'
+                      ' overlap=' + str(int( fileScale_overlap)) + ' cvr='+ str(min_color_val) +'_0'
         
     
 
@@ -371,14 +405,11 @@ if __name__ == "__main__":
         df.to_csv( os.path.join(path_output_spectrograms ,'spectrograms.csv') , index=False)     
     
     
-
     # when you want to adjust your spectro params, we work with original wav files because in this mode we segment and resample directly in this script
     if nberAdjustSpectros>0:
         ind_max = int(np.ceil(nberAdjustSpectros / np.round(orig_fileDuration / maxtime_display_spectro) ) )
 
-
     list_wav_withEvent_comp = glob.glob(os.path.join( path_audio_files , '*wav'))
-
 
     if nberAdjustSpectros>0:
         list_ind = np.random.randint(len(list_wav_withEvent_comp),size=ind_max-ind_min)
@@ -388,22 +419,26 @@ if __name__ == "__main__":
     elif indexation_selection:
         list_wav_withEvent = list_wav_withEvent_comp[ind_min:ind_max]
 
+
     list_wav_withEvent = [os.path.basename(x) for x in list_wav_withEvent]
+
 
     if nberAdjustSpectros==0:
  
         ncpus = 10
         with Pool(processes=ncpus) as pool:
-            pool.map(process_file, list_wav_withEvent)
+            # the partial function is used to have multiple arguments, ie https://python.omics.wiki/multiprocessing_map/multiprocessing_partial_function_multiple_arguments
+            partial_process_file = partial(process_file, peak_voltage=peak_voltage, sensitivity=sensitivity)
+            pool.map(partial_process_file, list_wav_withEvent)
             pool.close()
         
-#         for file in list_wav_withEvent:
-#             print(file)
-#             process_file(file)
+#        for file in list_wav_withEvent:
+#            print(file)
+#            process_file(file, peak_voltage, sensitivity)
 
     else:
         for file in list_wav_withEvent:
-            process_file(file)
+            process_file(file, peak_voltage, sensitivity)
            
 
     if not am_local:
@@ -416,8 +451,3 @@ if __name__ == "__main__":
             
             
             
-            
-            
-            
-            
-        
