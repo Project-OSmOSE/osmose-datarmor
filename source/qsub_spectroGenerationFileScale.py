@@ -32,9 +32,6 @@ def generate_and_save_figures(colmapspectros, segment_times, Freq, log_spectro, 
     fact_y = 1.3
     fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(fact_x * 1800 / my_dpi, fact_y * 512 / my_dpi), dpi=my_dpi)
     color_map = plt.cm.get_cmap(colmapspectros)  # .reversed()
-    print('LOG ', np.mean(log_spectro))
-    print('LOGmax ', np.max(log_spectro))
-    print('LOGmin ', np.min(log_spectro))
     plt.pcolormesh(segment_times, Freq, log_spectro, cmap=color_map)
     #plt.clim(vmin=min_color_val, vmax=max_color_val)
     plt.colorbar()
@@ -187,13 +184,11 @@ def process_file(audio_file, peak_voltage, sensitivity):
         # add sensitivity
         data =(data*peak_voltage)/sensitivity
         
-        print('DATA MEAN : ', np.mean(data**2))
         
         bpcoef = signal.butter(20, np.array([fmin_HighPassFilter, sample_rate / 2 - 1]), fs=sample_rate, output='sos',
                                btype='bandpass')
         data = signal.sosfilt(bpcoef, data)
 
-        print('DATA MEAN 2 : ', np.mean(data**2))
         if not os.path.exists(os.path.join(path_output_spectrograms, name_folder, audio_file[:-4])):
             os.makedirs(os.path.join(path_output_spectrograms, name_folder, audio_file[:-4]))
 
@@ -254,7 +249,7 @@ if __name__ == "__main__":
         path_osmose_dataset = os.path.join("C:", os.sep,"Users","torterma","Documents","Projets_Osmose","Technology","Analytics","osmose_dataset_sample")
         #path_osmose_dataset = "C:\Users\torterma\Documents\Projets_Osmose\Technology\Analytics\osmose_dataset_sample"
         analysis_fs = 240
-        dataset_ID = 'ohasisbio2015wker_sample2'
+        dataset_ID = 'gliderSPAms_sample1'
 
         maxtime_display_spectro = 600
         fileScale_nfft = 2048
@@ -269,7 +264,7 @@ if __name__ == "__main__":
         peak_voltage = 2.5    # Peak voltage in volt
         # nb_bits = 16   # number of bits of the coded signal
         # datatype = 'int16'
-        sensitivity_dB = -163.5  # Sensitivity of the hydrophone in dB ref 1µPa
+        sensitivity_dB = -170  # Sensitivity of the hydrophone in dB ref 1V/µPa
         sensitivity = 10**(sensitivity_dB/20) * 1e6
         nber_wav_to_be_processed = 1
 
@@ -304,8 +299,10 @@ if __name__ == "__main__":
         maxtime_display_spectro = analysis_fiche['maxtime_display_spectro'][0]
         norma_gliding_zscore = analysis_fiche['norma_gliding_zscore'][0]
         fmin_HighPassFilter = analysis_fiche['fmin_HighPassFilter'][0]
-
-
+        sensitivity_dB = analysis_fiche['sensibility_dB'][0]
+        peak_voltage = analysis_fiche['peak_voltage'][0]
+        scaling = analysis_fiche['scaling'][0]
+        
     # load needed variables from raw metadata
     metadata = pd.read_csv(os.path.join(path_osmose_dataset , dataset_ID , 'raw', 'metadata.csv') )
     orig_fileDuration = metadata['orig_fileDuration'][0]
@@ -420,10 +417,10 @@ if __name__ == "__main__":
 
     if nberAdjustSpectros==0:
  
-        # ncpus = 10
-        # with Pool(processes=ncpus) as pool:
-        #     pool.map(process_file, list_wav_withEvent)
-        #     pool.close()
+        ncpus = 10
+        with Pool(processes=ncpus) as pool:
+            pool.map(process_file, list_wav_withEvent)
+            pool.close()
         
         for file in list_wav_withEvent:
             print(file)
