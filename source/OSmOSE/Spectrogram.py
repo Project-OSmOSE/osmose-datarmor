@@ -235,7 +235,7 @@ class Spectrogram(Dataset):
 
     #endregion
 
-    def __build_path(self):
+    def __build_path(self, adjust:bool = False):
         analysis_path = os.path.join(self.Path, "analysis")
         audio_foldername = str(self.Max_time_display_spectro)+'_'+str(self.Analysis_fs)
         self.audio_path = os.path.join(self.Path, "raw", "audio", audio_foldername)
@@ -243,7 +243,10 @@ class Spectrogram(Dataset):
         self.__path_output_spectrograms = os.path.join(analysis_path, "spectrograms", audio_foldername)
         self.__path_summstats = os.path.join(analysis_path, "normaParams", audio_foldername)
 
-        self.__spectro_foldername = f"nfft={str(self.Nfft)}_winsize={str(self.Window_size)}_overlap={str(self.Overlap)} \
+        if adjust:
+            self.__spectro_foldername = "spectro_adjustParams"
+        else:
+            self.__spectro_foldername = f"nfft={str(self.Nfft)}_winsize={str(self.Window_size)}_overlap={str(self.Overlap)} \
                                 _cvr={str(self.Min_color_value)}-{str(self.Max_color_value)}"
 
         self.__path_output_spectrogram_matrices = os.path.join(analysis_path, "spectrograms_mat", audio_foldername, self.__spectro_foldername)
@@ -460,13 +463,15 @@ class Spectrogram(Dataset):
 
     #region On cluster
 
-    def process_file(self, audio_file: str) -> None:
+    def process_file(self, audio_file: str, *, adjust: bool = False) -> None:
 
-        self.__build_path()
+        self.__build_path(adjust)
+
+        Zscore = self.Zscore_duration if not adjust else "original"
 
         #! Determination of zscore normalization parameters
-        if self.Data_normalization == "zscore" and self.Zscore_duration != "original" and self.Zscore_duration:
-            average_over_H = int(round(pd.to_timedelta(self.Zscore_duration).total_seconds() / self.Max_time_display_spectro))
+        if Zscore and self.Data_normalization == "zscore" and Zscore != "original":
+            average_over_H = int(round(pd.to_timedelta(Zscore).total_seconds() / self.Max_time_display_spectro))
 
             df=pd.DataFrame()
             for dd in glob(os.path.join(self.__path_summstats,'summaryStats*')):        
@@ -480,7 +485,7 @@ class Spectrogram(Dataset):
         if audio_file not in os.listdir(self.audio_path):
             raise FileNotFoundError(f"The file {audio_file} must be in {self.audio_path} in order to be processed.")
 
-        if self.Zscore_duration and self.Zscore_duration != "original" and self.Data_normalization=="zscore":
+        if Zscore and Zscore != "original" and self.Data_normalization=="zscore":
             self.__zscore_mean = self.__summStats[self.__summStats['filename'] == audio_file]['mean_avg'].values[0]
             self.__zscore_std = self.__summStats[self.__summStats['filename'] == audio_file]['std_avg'].values[0]
 
@@ -496,6 +501,9 @@ class Spectrogram(Dataset):
         data = signal.sosfilt(bpcoef, data)
 
         if not os.path.exists(os.path.join(self.__path_output_spectrograms, self.__spectro_foldername, os.path.splitext(audio_file)[0])):
+            os.makedirs(os.path.join(self.__path_output_spectrograms, self.__spectro_foldername, os.path.splitext(audio_file)[0]))
+        elif adjust:
+            shutil.rmtree(os.path.join(self.__path_output_spectrograms, self.__spectro_foldername))
             os.makedirs(os.path.join(self.__path_output_spectrograms, self.__spectro_foldername, os.path.splitext(audio_file)[0]))
 
         output_file = os.path.join(self.__path_output_spectrograms, self.__spectro_foldername, os.path.splitext(audio_file)[0], audio_file)
