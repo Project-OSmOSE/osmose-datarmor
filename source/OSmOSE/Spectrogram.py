@@ -288,7 +288,7 @@ class Spectrogram(Dataset):
 
 
     # TODO: some cleaning
-    def initialize(self, *, ind_min: int = 0, ind_max: int = -1, analysis_fs: int = None, reshape_method: Literal["resample","reshape","none"] = "none") -> None:
+    def initialize(self, *, ind_min: int = 0, ind_max: int = -1, analysis_fs: int = None, reshape_method: Literal["resample","reshape","none"] = "none", pad_silence: bool = True) -> None:
         
         if analysis_fs:
             self.Analysis_fs = analysis_fs
@@ -352,17 +352,15 @@ class Spectrogram(Dataset):
 
         #! RESHAPING
         # Reshape audio files to fit the maximum spectrogram size, whether it is greater or smaller.
-        #? Quite I/O intensive and monothread, might need to rework to allow qsub.
         reshape_job_id_list = []
 
         if self.Max_time_display_spectro != int(orig_fileDuration):
             # We might reshape the files and create the folder. Note: reshape function might be memory-heavy and deserve a proper qsub job. 
-            if self.Max_time_display_spectro > int(orig_fileDuration) and reshape_method == "none":
-                raise ValueError("Spectrogram size cannot be greater than file duration. If you want to automatically reshape your audio files to fit the spectrogram size, consider adding auto_reshape=True as parameter.")
+            if self.Max_time_display_spectro > int(orig_fileDuration) and reshape_method in ["none", "resample"]:
+                raise ValueError("Spectrogram size cannot be greater than file duration. If you want to automatically reshape your audio files to fit the spectrogram size, consider setting the reshape method to 'reshape'.")
             
             print(f"Automatically reshaping audio files to fit the Maxtime display spectro value. Files will be {self.Max_time_display_spectro} seconds long.")
 
-            #TODO finish
             if reshape_method == "reshape":
                 # build job, qsub, stuff
                 nb_reshaped_files = (orig_fileDuration * total_nber_audio_files) / self.Max_time_display_spectro
@@ -390,16 +388,24 @@ class Spectrogram(Dataset):
                     jobfile = self.Jb.build_job_file(script_path=os.path.join(os.dirname(__file__), "cluster", "audio_reshaper.py"), \
                                 script_args=f"--input-files {self.path_input_audio_file} --chunk-size {self.Max_time_display_spectro} --ind-min {i_min}\
                                      --ind-max {i_max} --output-dir {self.audio_path} --offset-beginning {offset_beginning} --offset-end {offset_end}", \
-                                jobname="OSmOSE_reshape", preset="medium")
+                                jobname="OSmOSE_reshape_py", preset="medium")
 
                     job_id = self.Jb.submit_job(jobfile, dependency=norma_job_id_list)
                     reshape_job_id_list.append(job_id)
                 
-                reshaped_files = reshape(self.Max_time_display_spectro, self.list_wav_to_process, self.audio_path)
-                metadata["dataset_totalDuration"] = len(reshaped_files) * self.Max_time_display_spectro
             elif reshape_method == "resample":
-                #same as above, using bash
-                pass
+                silence_arg = "-s" if pad_silence else ""
+                for batch in range(self.Batch_number):
+                    i_min = batch * batch_size
+                    i_max = (i_min + batch_size if batch < self.Batch_number - 1 else len(self.list_wav_to_process)) # If it is the last batch, take all files
+                    jobfile = self.Jb.build_job_file(script_path=os.path.join(os.dirname(__file__), "cluster", "reshaper.sh"), \
+                                script_args=f"-d {self.Path} -i {os.path.basename(self.path_input_audio_file)} -t {analysis_fs} \
+                                    -m {i_min} -x {i_max} -o {self.audio_path} -n {self.Max_time_display_spectro} {silence_arg}", \
+                                jobname="OSmOSE_reshape_bash", preset="medium")
+
+                    job_id = self.Jb.submit_job(jobfile, dependency=resample_job_id_list)
+                    reshape_job_id_list.append(job_id)
+
 
         metadata["dataset_fileDuration"] = self.Max_time_display_spectro
         metadata["dataset_fs"] = self.Analysis_fs
