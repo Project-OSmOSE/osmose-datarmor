@@ -10,8 +10,6 @@ except ModuleNotFoundError:
     import tomli as tomllib
 import struct
 
-path_osmose_dataset = "/home/datawork-osmose/dataset/"
-
 def display_folder_storage_infos(dir_path: str) -> None:
 
     usage=shutil.disk_usage(dir_path)
@@ -27,7 +25,7 @@ def list_not_built_datasets(datasets_folder_path: str) -> None:
         ----------
         dataset_folder_path: The path to the directory containing the datasets"""
 
-    dataset_list = [directory for directory in sorted(os.listdir(datasets_folder_path)) if os.path.isdir(os.path.join(path_osmose_dataset,directory)) ]
+    dataset_list = [directory for directory in sorted(os.listdir(datasets_folder_path)) if os.path.isdir(os.path.join(datasets_folder_path,directory)) ]
 
     list_not_built_datasets = []
 
