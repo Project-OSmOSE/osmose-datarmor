@@ -11,7 +11,7 @@ except ModuleNotFoundError:
     print("It seems you are on a non-Unix operating system (probably Windows). The build_dataset() method will not work as intended and permission might be uncorrectly set.")
     skip_perms = True
 from warnings import warn
-from utils import read_header
+from OSmOSE.utils import read_header
 
 class Dataset():
     def __init__(self, dataset_path: str, *, coordinates: Union[str, list] = None, osmose_group_name: str = None) -> None:
@@ -122,7 +122,10 @@ class Dataset():
             list_filename.append(filename_csv[ind_dt])
 
             try:
-                sr, frames, sampwidth, channels = read_header(filewav)
+                sampwidth, frames, sr, channels = read_header(filewav)
+                
+                
+                
             
             except Exception as e:
                 list_file_problem.append(filewav)
