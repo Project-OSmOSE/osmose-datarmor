@@ -1,5 +1,5 @@
 import argparse
-from OSmOSE.Spectrogram import Spectrogram
+from OSmOSE import Spectrogram
 import random
 import glob
 import os
