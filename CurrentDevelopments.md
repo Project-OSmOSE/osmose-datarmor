@@ -1,0 +1,3 @@
+- MaelleTtrt (01/07/2022) : add hydrophone sensitivity to qsub_fileScaleAnalysis.py l.164 
+- MathieuDupont (25/07/2022) : randomise and optimize wav selection for preview 
+- GabrielDubus (01/07/2022) : add mmdetect model to AI notebook
