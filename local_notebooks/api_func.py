@@ -34,6 +34,13 @@ def return_cdsapi(filename, key, variable, year, month, day, time, area):
   filename = filename + '.nc'
 
   c = cdsapi.Client()
+  
+  if day == 'all':
+    day = ['01', '02', '03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31']
+  if month == 'all':
+    month = ['01','02','03','04','05','06','07','08','09','10','11','12']
+  if time == 'all':
+    time = ['00:00','01:00','02:00','03:00','04:00','05:00','06:00','07:00','08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00','21:00','22:00','23:00']
 
   r = c.retrieve('reanalysis-era5-single-levels',
             {
@@ -50,7 +57,7 @@ def return_cdsapi(filename, key, variable, year, month, day, time, area):
             filename,
             )
   r.download(filename)
-  print('\n[===>--------]\n')
+
 
 
 def format_nc(filename):
@@ -81,8 +88,6 @@ def format_nc(filename):
   hours = np.array(time_)%24
   dates = np.array([datetime(elem.year, elem.month, elem.day, hour) for elem, hour in list(zip(data['time'], hours))])
 
-  print('\n[======>-----]\n')
-
   return dates, lon, lat, single_levels, variables
 
 
@@ -96,13 +101,17 @@ def save_results(dates, lat, lon, single_levels, variables, filename):
 			for k in range(len(lon)):
 				stamps[i,j,k] = [dates[i], lat[j], lon[k]]
 	np.save('stamps_'+filename, stamps, allow_pickle = True)
-	print('\n[============]\nDone')
-	return None
+
+
 
 
 def final_creation(df1, filename, key, variable, year, month, day, time, area, type_crea = 'complexe') :
   return_cdsapi(filename, key, variable, year, month, day, time, area)
-  dates, lon, lat, single_levels, variables = format_nc(filename)
-  test = save_results(dates, lat, lon, single_levels, variables, filename)
+  with tqdm(total = 100) as pbar :
+    pbar.update(33)
+    dates, lon, lat, single_levels, variables = format_nc(filename)
+    pbar.update(33)
+    test = save_results(dates, lat, lon, single_levels, variables, filename)
+    pbar.update(33)
   return test
 
