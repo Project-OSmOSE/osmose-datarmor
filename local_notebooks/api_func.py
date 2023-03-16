@@ -1,6 +1,7 @@
 import cdsapi
 from datetime import date, datetime
 import os
+from tqdm import tqdm
 from netCDF4 import Dataset
 import numpy as np
 import pandas as pd
