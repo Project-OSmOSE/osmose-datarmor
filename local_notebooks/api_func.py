@@ -6,7 +6,7 @@ from netCDF4 import Dataset
 import numpy as np
 import pandas as pd
 
-def make_cds_file(key, udi):
+def make_cds_file(key, udi, path):
 	os.chdir(os.path.expanduser("~"))
 	try :
  	   os.remove('.cdsapirc')
@@ -18,12 +18,20 @@ def make_cds_file(key, udi):
 	os.system(cmd1)
 	os.system(cmd2)
 
-	try :
-	   os.mkdir('api')
-	except FileExistsError:
-	    pass
 
-	path_to_api = os.path.join(os.path.expanduser("~"), "api/")
+
+	if path == None:
+		try :
+		   os.mkdir('api')
+		except FileExistsError:
+		    pass
+		path_to_api = os.path.join(os.path.expanduser("~"), "api/")
+	else :
+		try :
+		   os.mkdir(path+'api')
+		except FileExistsError:
+		    pass
+		path_to_api = path+'api'
 
 	os.chdir(path_to_api)
 	os.getcwd()
@@ -106,7 +114,7 @@ def save_results(dates, lat, lon, single_levels, variables, filename):
 
 
 
-def final_creation(df1, filename, key, variable, year, month, day, time, area, type_crea = 'complexe') :
+def final_creation(df1, filename, key, variable, year, month, day, time, area) :
   return_cdsapi(filename, key, variable, year, month, day, time, area)
   with tqdm(total = 100) as pbar :
     pbar.update(33)
