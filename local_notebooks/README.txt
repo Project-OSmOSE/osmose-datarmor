@@ -35,10 +35,23 @@ One array saves the stamps, and each individual variable is saved in its own arr
 All arrays have the same dimensions and shapes.
 To read the stamps array you need to allow pickle data : stamps = np.load('stamps.npy', allow_pickle=True)
 The stamps consists in time, latitude and longitude information. 
-For instance, if you've downloaded total precipitation data you will get a tp.npy array and a stamps.npy array.
+Be advised that latitude data are stored in decreasing order, and longitude data stored in increasing order.
+For instance, if you've downloaded total precipitation data for N dates, Y latitudes and X longitudes, you will get a tp.npy array (N, Y, X) and a stamps.npy array (N, Y, X, 3).
 For chosen i,j,k values corresponding to time, latitude and longitude you will have :
-tp[i,j,k] = 3.2
+tp[i,j,k] = 3.2 (m/h)
+> array([[[8.67361738e-19, 8.67361738e-19, 8.67361738e-19, ...,
+         1.02081993e-06, 1.02081993e-06, 5.68742531e-06],
+        [8.67361738e-19, 8.67361738e-19, 8.67361738e-19, ...,
+         8.67361738e-19, 8.67361738e-19, 4.81243680e-06],
+        [8.67361738e-19, 8.67361738e-19, 8.67361738e-19, ...,
+         8.67361738e-19, 8.67361738e-19, 1.02081993e-06],
+         ...
 stamps[i,j,k] = (date, latitude, longitude)
+> array([[[[datetime.datetime(2019, 10, 1, 0, 0), -41.0, -63.75],
+         [datetime.datetime(2019, 10, 1, 0, 0), -41.0, -63.5],
+         [datetime.datetime(2019, 10, 1, 0, 0), -41.0, -63.25],
+         ...
+
 Changing i will change the time, changing j will change the latitude and changing k will change the longitude.
 
 
