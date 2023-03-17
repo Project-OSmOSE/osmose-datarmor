@@ -108,10 +108,11 @@ def save_results(dates, lat, lon, single_levels, variables, filename):
 	for i in range(len(variables)):
 		np.save(variables[i]+'_'+filename, np.ma.filled(single_levels[i], fill_value=float('nan')), allow_pickle = True)
 
-	np.save('timestamps.npy', np.array(dates))
-	np.save('latitude.npy', np.array(lat))
-	np.save('longitude.npy', np.array(lon))
-	np.save('timestamps_epoch.npy', np.array(list(map(get_epoch_time, np.array(dates)))))
+	np.savez('stamps', np.array(dates), np.array(list(map(get_epoch_time, np.array(dates)))), np.array(lat), np.array(lon))
+#	np.save('timestamps.npy', np.array(dates))
+#	np.save('latitude.npy', np.array(lat))
+#	np.save('longitude.npy', np.array(lon))
+#	np.save('timestamps_epoch.npy', np.array(list(map(get_epoch_time, np.array(dates)))))
 #	stamps = np.zeros((len(dates), len(lat), len(lon), 3), dtype=object)
 #	for i in range(len(dates)):
 #		for j in range(len(lat)):
