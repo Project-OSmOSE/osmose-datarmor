@@ -52,4 +52,25 @@ While stamps will be in the following format :
 > latitude = array([ -41., -41.25, ... , -50.25, -50.5 ], dtype=float32)
 > longitude = array([ 3.25, 3.5, ... , 11., 11.25 ], dtype=float32)
 
+## Code to plot 2D image of one variable (here mwd) :
+
+from mpl_toolkits.mplot3d import Axes3D
+import matplotlib.pyplot as plt
+import matplotlib.cm as cm
+import numpy as np
+import matplotlib.pyplot as plt
+import os
+
+path = os.path.join(os.path.expanduser('~'), 'api/')
+mwd = np.load(path+'mwd_api_data.npy', allow_pickle=True)
+timestamp = np.load(path+'timestamps.npy', allow_pickle=True)
+vect_lat = np.load(path+'latitude.npy', allow_pickle=True)
+vect_lon = np.load(path+'longitude.npy', allow_pickle=True)
+mat_lat, mat_lon = np.meshgrid(vect_lat,vect_lon)
+
+fig = plt.figure(figsize=(6,5))
+plt.pcolormesh(mat_lon,mat_lat,mwd[0,:,:].T, cmap=cm.jet)
+plt.title('tp variable at time '+str(timestamp[0]))
+plt.colorbar()
+plt.show()
 
