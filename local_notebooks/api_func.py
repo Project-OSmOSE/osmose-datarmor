@@ -108,7 +108,7 @@ def save_results(dates, lat, lon, single_levels, variables, filename):
 	for i in range(len(variables)):
 		np.save(variables[i]+'_'+filename, np.ma.filled(single_levels[i], fill_value=float('nan')), allow_pickle = True)
 
-	np.savez('stamps', np.array(dates), np.array(list(map(get_epoch_time, np.array(dates)))), np.array(lat), np.array(lon))
+	np.savez('stamps', timestamps = np.array(dates), timestamps_epoch = np.array(list(map(get_epoch_time, np.array(dates)))), latitude = np.array(lat), longitude = np.array(lon))
 #	np.save('timestamps.npy', np.array(dates))
 #	np.save('latitude.npy', np.array(lat))
 #	np.save('longitude.npy', np.array(lon))
