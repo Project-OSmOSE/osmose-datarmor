@@ -33,9 +33,11 @@ III - Using the downloaded data
 The data you have downloaded is three dimensional (space+time). Therefore, it is stored as a 3D numpy array you can read using np.read().
 Each individual variable is saved in its own array.
 All arrays have the same dimensions and shapes.
-Four more arrays are saved, they are 'timestamps.csv', 'timestamps_epoch.csv', 'latitude.csv', 'longitude.csv'
-To read the timestamps.csv array you need to allow pickle data : stamps = np.load('timestamps.npy', allow_pickle=True)
-timestamps.csv saves time data as a datetime, while timestamps_epoch.csv saves time as an epoch time or the time in seconds since January 1, 1970, 00:00:00 at UTC.
+One other arrays is saved containing : 'timestamps', 'timestamps_epoch', 'latitude', 'longitude'
+To read this stamps.npz array enter the following line : stamps = np.load('stamps.npz')
+The line stamps.files will return the arrays stored inside the stamps files (ie. timestamps, timestamps_epoch, latitude, longitude).
+To access a desired array, enter for exemple the line stamps['latitude'] or stamps['timestamps_epoch']
+timestamps saves time data as a datetime, while timestamps_epoch saves time as an epoch time or the time in seconds since January 1, 1970, 00:00:00 at UTC.
 Be advised that latitude data are stored in decreasing order, and longitude data stored in increasing order.
 For chosen i,j,k values corresponding to time, latitude and longitude you will have  :
 tp[i,j,k] = 3.2 (m/h)
