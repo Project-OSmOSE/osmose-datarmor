@@ -1,10 +1,13 @@
 import cdsapi
 from datetime import date, datetime
 import os
+import calendar
 from tqdm import tqdm
 from netCDF4 import Dataset
 import numpy as np
 import pandas as pd
+
+get_epoch_time = lambda x : calendar.timegm(x.timetuple()) if isinstance(x, datetime) else x
 
 def make_cds_file(key, udi, path):
 	os.chdir(os.path.expanduser("~"))
@@ -104,12 +107,17 @@ def format_nc(filename):
 def save_results(dates, lat, lon, single_levels, variables, filename):
 	for i in range(len(variables)):
 		np.save(variables[i]+'_'+filename, np.ma.filled(single_levels[i], fill_value=float('nan')), allow_pickle = True)
-	stamps = np.zeros((len(dates), len(lat), len(lon), 3), dtype=object)
-	for i in range(len(dates)):
-		for j in range(len(lat)):
-			for k in range(len(lon)):
-				stamps[i,j,k] = [dates[i], lat[j], lon[k]]
-	np.save('stamps_'+filename, stamps, allow_pickle = True)
+
+	np.save('timestamps.npy', np.array(dates))
+	np.save('latitude.npy', np.array(lat))
+	np.save('longitude.npy', np.array(lon))
+	np.save('timestamps_epoch.npy', np.array(list(map(get_epoch_time, np.array(dates)))))
+#	stamps = np.zeros((len(dates), len(lat), len(lon), 3), dtype=object)
+#	for i in range(len(dates)):
+#		for j in range(len(lat)):
+#			for k in range(len(lon)):
+#				stamps[i,j,k] = [dates[i], lat[j], lon[k]]
+#	np.save('stamps_'+filename, stamps, allow_pickle = True)
 
 
 
