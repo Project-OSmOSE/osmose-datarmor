@@ -34,7 +34,7 @@ def make_cds_file(key, udi, path):
 		   os.mkdir(path+'api')
 		except FileExistsError:
 		    pass
-		path_to_api = path+'api'
+		path_to_api = os.path.join(path, 'api')
 
 	os.chdir(path_to_api)
 	os.getcwd()
