@@ -16,6 +16,8 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
+    print("Parameters :", args)
+
     os.system("ln -sf /appli/sox/sox-14.4.2_gcc-7.2.0/bin/sox sox")
     dataset = Spectrogram(args.dataset_path, sr_analysis=args.sr_analysis)
 
@@ -24,7 +26,7 @@ if __name__ == "__main__":
         
     adjust = args.nb_adjust_files and args.nb_adjust_files > 0
     if adjust:
-        files_to_process = random.sample(lines, args.nb_adjust_files)
+        files_to_process = random.sample(lines, min(args.nb_adjust_files, len(lines) -1))
     else:
         files_to_process = lines[args.ind_min: args.ind_max if args.ind_max != -1 else len(lines)]
 
