@@ -6,7 +6,6 @@ import os
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Python script to process a list of file and generate spectrograms.")
     required = parser.add_argument_group('required arguments')
-    required.add_argument("--input-file-list", "-l", required=True, help="The file path of the list of audio files, generally a timestamp.csv file.")
     required.add_argument("--sr-analysis", "-s", required=True, help="The analysis frequency.")
     required.add_argument("--dataset-path", "-p", required=True, help="The path to the dataset folder")
     parser.add_argument("--nb-adjust-files", "-a", type=int, help="The number of spectrograms to generated in order to adjust parameters. If a value higher than 0 is entered, the generation will switch to adjust mode. Default is 0.")
@@ -21,14 +20,18 @@ if __name__ == "__main__":
     os.system("ln -sf /appli/sox/sox-14.4.2_gcc-7.2.0/bin/sox sox")
     dataset = Spectrogram(args.dataset_path, sr_analysis=args.sr_analysis)
 
-    with open(args.input_file_list, "r") as f:
-        lines = f.readlines()
+    if not dataset.path.joinpath("processed","spectrogram","adjust_metadata.csv"):
+        raise FileNotFoundError(f"The file adjust_metadata.csv has not been found in the processed/spectrogram folder. Consider using the initialize() or update_parameters() methods.")
+
+    files = list(dataset.audio_path.glob("*.wav"))
+
+    print(f"Found {len(files)} files in {dataset.audio_path}.")
         
     adjust = args.nb_adjust_files and args.nb_adjust_files > 0
     if adjust:
-        files_to_process = random.sample(lines, min(args.nb_adjust_files, len(lines) -1))
+        files_to_process = random.sample(files, min(args.nb_adjust_files, len(files) -1))
     else:
-        files_to_process = lines[args.ind_min: args.ind_max if args.ind_max != -1 else len(lines)]
+        files_to_process = files[args.ind_min: args.ind_max if args.ind_max != -1 else len(files)]
 
-    for audio_file in files_to_process:
-        dataset.process_file(audio_file.rstrip(), adjust=adjust, save_matrix=args.save_matrix)
+    for i, audio_file in enumerate(files_to_process):
+        dataset.process_file(audio_file, adjust=adjust, save_matrix=args.save_matrix, clean_adjust_folder=True if i == 0 else False)
