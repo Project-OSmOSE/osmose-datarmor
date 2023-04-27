@@ -9,8 +9,8 @@ if __name__ == "__main__":
     required.add_argument("--sr-analysis", "-s", required=True, help="The analysis frequency.")
     required.add_argument("--dataset-path", "-p", required=True, help="The path to the dataset folder")
     parser.add_argument("--nb-adjust-files", "-a", type=int, help="The number of spectrograms to generated in order to adjust parameters. If a value higher than 0 is entered, the generation will switch to adjust mode. Default is 0.")
-    parser.add_argument("--ind-min", "-min", type=int, default=0, help="The first file to consider. Default is 0.")
-    parser.add_argument("--ind-max", "-max", type=int, default=-1, help="The last file to consider. -1 means consider all files from ind-min. Default is -1")
+    parser.add_argument("--batch-ind-min", "-min", type=int, default=0, help="The first file to consider. Default is 0.")
+    parser.add_argument("--batch-ind-max", "-max", type=int, default=-1, help="The last file to consider. -1 means consider all files from batch-ind-min. Default is -1")
     parser.add_argument("--save-matrix", "-m", action="store_true", help="Whether to save the spectrogram matrices or not. Note that activating this parameter might increase greatly the volume of the project.")
 
     args = parser.parse_args()
