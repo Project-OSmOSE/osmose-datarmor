@@ -17,6 +17,7 @@ if __name__ == "__main__":
     parser.add_argument("--save-image", "-si", action="store_true", help="Whether to save the spectrogram images or not.")
     parser.add_argument("--merge-files", "-m", action="store_true", help="Whether to merge continuous files or not. Only use this option if the audio files are continuous.")
     parser.add_argument("--last-file-behavior", "-lfb", default="pad", help="What to do with the remaining data of a reshape batch. Available options are pad, discard and truncate. Default is pad.")
+    parser.add_argument("--write-audio","w", action="store_true", help="Write the reshaped audio files")
 
     args = parser.parse_args()
 
@@ -46,4 +47,4 @@ if __name__ == "__main__":
         files_to_process = files[args.batch_ind_min: args.batch_ind_max if args.batch_ind_max != -1 else len(files)]
 
     for i, audio_file in enumerate(files_to_process):
-        dataset.generate_spectrogram(audio_file, adjust=adjust, save_image=args.save_image, save_matrix=args.save_matrix, clean_adjust_folder=True if i == 0 else False, overwrite=args.overwrite, merge_files=args.merge_files, last_file_behavior=args.last_file_behavior)
+        dataset.generate_spectrogram(audio_file, adjust=adjust, save_image=args.save_image, save_matrix=args.save_matrix, clean_adjust_folder=True if i == 0 else False, overwrite=args.overwrite, merge_files=args.merge_files, last_file_behavior=args.last_file_behavior, write_audio_file=args.write_audio)
