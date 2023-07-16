@@ -1,7 +1,7 @@
 <div align="center">
 
   <img src="assets/osmose_logo.png" height="100px">
-  <img src="assets/ifremer_logo.jpg" height="100px">
+  <img src="assets/ifremer_logo.jpg" height="80px">
 </div>
 
 # OSmOSE Project on Datarmor
