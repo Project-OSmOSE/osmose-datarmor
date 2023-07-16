@@ -26,7 +26,7 @@ The newest stable version of the toolkit can be directly used within a Jupyter H
 
 ## Quick start for developers
 
-To develop and/or test some code contributions to our toolkit on Datarmor, please refer to the `Contribution on Datarmor` section of [README](https://github.com/Project-OSmOSE/osmose-toolkit/edit/develop/README.md). Beyond the codes inherent to the toolkit described in this section, the folder `/home/datawork-osmose/osmose-datarmor/source/` contains source codes specific to Datarmor such as pbs job submission.
+To develop and/or test some code contributions to our toolkit on Datarmor, please refer to the `Contribution on Datarmor` section of [README](https://github.com/Project-OSmOSE/osmose-toolkit/blob/main/README.md). Beyond the codes inherent to the toolkit described in this section, the folder `/home/datawork-osmose/osmose-datarmor/source/` contains source codes specific to Datarmor such as pbs job submission.
 
 ## License
 
