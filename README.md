@@ -1,43 +1,36 @@
-# Analytics platform of OSmOSE 
+<div align="center">
 
-OSmOSE is an open source project aiming to develop tools to help processing underwater passive acoustic data. Our OSmOSE analytical tools have been primarily developed and made accessible as user-friendly [notebooks](notebooks/) on the infrastructure [Datarmor of IFREMER](https://wwz.ifremer.fr/Recherche/Infrastructures-de-recherche/Infrastructures-numeriques/Pole-de-Calcul-et-de-Donnees-pour-la-Mer). Consequently, it is important to note that most of our codes are not suited for local standalone execution. We are currently making some efforts in adapting our codes in this direction so they can be tested and reviewed by external user/developers.
+  <img src="assets/osmose_logo.png" height="100px">
+  <img src="assets/ifremer_logo.jpg" height="80px">
+</div>
 
+# OSmOSE Project on Datarmor
 
-## List of notebooks 
+The Open Science meets Ocean Sound Explorers is a collaborative research project aiming to develop a complete collection of FAIR acoustic analysis tools and methods. 
 
-1. build_datasets.ipynb : used for the importation and formatting of new datasets;
+## Presentation
 
-2. fileScaleAnalysis.ipynb : used for the generation of file-scale (or shorter) spectrograms;
+Our [OSmOSE toolkit](https://github.com/Project-OSmOSE/osmose-toolkit) has been deployed on the [DATARMOR](https://www.ifremer.fr/fr/infrastructures-de-recherche/le-supercalculateur-datarmor) cluster of IFREMER, on which our production version runs. The toolkit is available to Datarmor members (must be affiliated to unix group gosmose, you will need a user account that may be provided upon request to be sent at dorian.cazau@ensta-bretagne.fr) as a suite of notebooks available in `/home/datawork-osmose/osmose-datarmor/notebooks/` and covering the most basic processing cases:
 
-3. datasetScaleAnalysis.ipynb : used for long-term analysis (i.e. with timescale at least longer than the audio file duration), including the computation of soundscape metrics (eg long-term averaged spectrograms, EPD) and the retrieval of raw welch spectra at different time resolutions;
+1. data_uploader.ipynb : used for the importation and formatting of new datasets;
 
-4. AI.ipynb : used for machine learning applications.
+2. spectrogram_generator.ipynb : used for the generation of file-scale (or shorter) spectrograms;
 
-See [user_guide.pdf](notebooks/user_guide.pdf ) for more details.
+3. soundscape_analyzer.ipynb : used for long-term analysis (i.e. with timescale at least longer than the audio file duration), including the computation of soundscape metrics (eg long-term averaged spectrograms, EPD) and the retrieval of raw welch spectra at different time resolutions;
 
+See our [user guide](assests/user_guide.pdf) for more details.
 
-## Note for developers : how to contribute ?
+## Quick start for users
 
-1. Start by cloning this folder
-2. Download a [sample dataset](https://drive.google.com/file/d/1ZO3_WiaI7j6LZfv8vX_yVeF9ACVZRkio/view?usp=sharing) (ask for access if required) to be put at the same level as your cloned folder
-3. Contribute to our open source project on GitHub !
+The newest stable version of the toolkit can be directly used within a Jupyter Hub session of Datarmor by setting the kernel to `osmose`. 
 
-Here is our current [list](https://docs.google.com/document/d/e/2PACX-1vSe6s3FT97Vp3Khqr4NCXtZ9Gr6DKE-RxjbXF8gLxhf7NxkgX76hKXNX4KzMJKyHautm4x__XhMvyj0/pub) of current bugs & new functionalities to be implemented. 
+## Quick start for developers
 
-As mentionned in our preambule, only a few of our scripts can be run on a local computer and can then be properly reviewed and augmented by other developers. They are referenced in the next section.
+To develop and/or test some code contributions to our toolkit on Datarmor, please refer to the `Contribution on Datarmor` section of [README](https://github.com/Project-OSmOSE/osmose-toolkit/blob/main/README.md). Beyond the codes inherent to the toolkit described in this section, the folder `/home/datawork-osmose/osmose-datarmor/source/` contains source codes specific to Datarmor such as pbs job submission.
 
+## License
 
-#### Codes adapted for local standalone execution
-
-* The script [qsub_spectroGenerationFileScale.py](source/qsub_spectroGenerationFileScale.py) can be directly used in local to process raw wav data provided eg in ./raw/audio/ . See code comments for details.
-
-* The notebook [AI.ipynb](notebooks/AI.ipynb) can be executed in stand-alone. It is based on the two imported modules [launcher_AI.py ](source/launcher_AI.py) and [module_modelsAI.py](source/module_modelsAI.py). See Use Case 4 of our [user_guide.pdf](notebooks/user_guide.pdf ) for implementation details.
- 
-
-#### Modules not adapted for local execution but you can do some stuff anyway!
-
-* [module_soundscape.py](source/module_soundscape.py) : no standalone execution but you can propose new soundscape figures based on code examples and using welch spectra available in the datasets at ./analysis/soundscape/raw_welch/
-
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. See [LICENSE](LICENSE) for the complete AGPL license
 
 
 
